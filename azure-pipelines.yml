@@ -164,7 +164,7 @@ stages:
           ansibleInterface: 'remoteMachine'
           connectionOverSsh: 'Ansible-serverVM'
           playbookSourceRemoteMachine: 'agentMachine'
-          playbookRootRemoteMachine: '(Pipeline.Workspace)/Drop/'
+          playbookRootRemoteMachine: '$(Pipeline.Workspace)/Drop/'
           playbookPathLinkedArtifactOnRemoteMachine: 'web-app.yml'
           inventoriesRemoteMachine: 'hostList'
           inventoryHostListRemoteMachine: '13.71.45.109'
