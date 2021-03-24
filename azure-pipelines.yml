@@ -155,7 +155,7 @@ stages:
           connectionOverSsh: 'Ansible-serverVM'
           playbookSourceRemoteMachine: 'agentMachine'
           playbookRootRemoteMachine: '(Pipeline.Workspace)/Drop/'
-          playbookPathLinkedArtifactOnRemoteMachine: 'webapp.yml'
+          playbookPathLinkedArtifactOnRemoteMachine: 'web-app.yml'
           inventoriesRemoteMachine: 'hostList'
           inventoryHostListRemoteMachine: '13.71.45.109'
           sudoEnabled: true
