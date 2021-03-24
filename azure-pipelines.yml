@@ -160,8 +160,7 @@ stages:
           inventoryHostListRemoteMachine: '13.71.45.109'
           sudoEnabled: true
           sudoUser: 'ubuntu'
-          sudoEnabled: true
-          sudoUser: ubuntu
+          
 
              
      
