@@ -90,13 +90,13 @@ stages:
   displayName: 'Run WhiteSource_Bolt'
   dependsOn:
       - Application_Build
-  #jobs:
-    #- job: 
+  jobs:
+    - job: 
       
-     # steps:
-      #- task: WhiteSource@21
-        #inputs:
-          #cwd: '$(System.DefaultWorkingDirectory)'
+      steps:
+      - task: WhiteSource@21
+        inputs:
+          cwd: '$(System.DefaultWorkingDirectory)'
 
 ##########################################################################
 
