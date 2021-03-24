@@ -65,7 +65,17 @@ stages:
           arguments: '--self-contained --runtime win-x86 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
           zipAfterPublish: True
           
-     
+      - task: CopyFiles@2
+        inputs:
+              SourceFolder: '$(System.DefaultWorkingDirectory)'
+              Contents: '**/*.yml'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      
+      - task: PublishBuildArtifacts@1
+        inputs:
+              pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+              artifactName: 'Drop'
+
 ########################################################################
 
 - stage: Unit_Test
@@ -84,7 +94,7 @@ stages:
           projects: '**/*.Tests/*.csproj'
           arguments: '--configuration $(buildConfiguration)'
 
-
+      
 ##########################################################################
 
 - stage: WhiteSource_Bolt
@@ -110,43 +120,43 @@ stages:
   jobs:
     - job: 
       steps: 
-      - task: UseDotNet@2
-        inputs:
-          packageType: 'sdk'
-          useGlobalJson: true
-      - task: NuGetToolInstaller@1
-        inputs:
-          versionSpec: '5.x.x'
-          checkLatest: true
-      - task: NuGetCommand@2
-        inputs:
-          command: 'restore'
-          restoreSolution: '$(solution)'
-          feedsToUse: 'select'
-          noCache: true
+   #   - task: UseDotNet@2
+   #     inputs:
+   #       packageType: 'sdk'
+    #      useGlobalJson: true
+  #    - task: NuGetToolInstaller@1
+    #    inputs:
+    #      versionSpec: '5.x.x'
+     #     checkLatest: true
+   #   - task: NuGetCommand@2
+   #     inputs:
+  #        command: 'restore'
+   #       restoreSolution: '$(solution)'
+   #       feedsToUse: 'select'
+     #     noCache: true
     
-      - script: dotnet build --configuration $(buildConfiguration)
-        displayName: 'dotnet build $(buildConfiguration)'
+    #  - script: dotnet build --configuration $(buildConfiguration)
+    #    displayName: 'dotnet build $(buildConfiguration)'
 
 
-      - task: DotNetCoreCLI@2
-        displayName: 'dotnet publish $(buildConfiguration)'
-        inputs:
-          command: publish
-          publishWebProjects: False
-          projects: 'src/Blogifier/Blogifier.csproj'
-          arguments: '--self-contained --runtime win-x86 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-          zipAfterPublish: True
-      - task: CopyFiles@2
-        inputs:
-          SourceFolder: '$(System.DefaultWorkingDirectory)'
-          Contents: '**/*.yml'
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    #  - task: DotNetCoreCLI@2
+     #   displayName: 'dotnet publish $(buildConfiguration)'
+       # inputs:
+      #    command: publish
+      #    publishWebProjects: False
+      #    projects: 'src/Blogifier/Blogifier.csproj'
+       #   arguments: '--self-contained --runtime win-x86 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+       #   zipAfterPublish: True
+    #  - task: CopyFiles@2
+    #    inputs:
+     #     SourceFolder: '$(System.DefaultWorkingDirectory)'
+     #     Contents: '**/*.yml'
+       #   TargetFolder: '$(Build.ArtifactStagingDirectory)'
   
-      - task: PublishBuildArtifacts@1
-        inputs:
-          pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-          artifactName: 'Drop'
+     # - task: PublishBuildArtifacts@1
+    #    inputs:
+      #    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+       #   artifactName: 'Drop'
       
       
       - task: Ansible@0
