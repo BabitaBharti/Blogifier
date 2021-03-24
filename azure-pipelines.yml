@@ -164,7 +164,7 @@ stages:
           ansibleInterface: 'remoteMachine'
           connectionOverSsh: 'Ansible-serverVM'
           playbookSourceRemoteMachine: 'agentMachine'
-          playbookRootRemoteMachine: '$(Pipeline.Workspace)/Drop/'
+          playbookRootRemoteMachine: '$(System.DefaultWorkingDirectory)/_BabitaBharti.Blogifier/Drop'
           playbookPathLinkedArtifactOnRemoteMachine: 'web-app.yml'
           inventoriesRemoteMachine: 'hostList'
           inventoryHostListRemoteMachine: '13.71.45.109'
@@ -179,4 +179,4 @@ stages:
         inputs:
           azureSubscription: 'Pay-As-You-Go (2bf3ae71-d116-484d-a88c-ba149c6430ff)'
           WebAppName: '$(webapp_name)'
-          packageForLinux: '$(Pipeline.Workspace)/Drop/(Build.BuildId).zip'
+          packageForLinux: '$(System.DefaultWorkingDirectory)/_BabitaBharti.Blogifier/Drop/(Build.BuildId).zip'
