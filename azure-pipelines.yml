@@ -94,7 +94,7 @@ stages:
     - job: 
       
       steps:
-      - task: WhiteSource@21
+      #- task: WhiteSource@21
         #inputs:
           #cwd: '$(System.DefaultWorkingDirectory)'
 
