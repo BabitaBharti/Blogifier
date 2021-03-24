@@ -92,15 +92,11 @@ stages:
       - Application_Build
   jobs:
     - job: 
-      pool: 
-        vmImage: 'windows-latest'
+      
       steps:      
-      - task: DotNetCoreCLI@2
-        displayName: 'Run Unit Test'
+      - task: WhiteSource@21
         inputs:
-          command: 'test'
-          projects: '**/*.Tests/*.csproj'
-          arguments: '--configuration $(buildConfiguration)'
+          cwd: '$(System.DefaultWorkingDirectory)'
 
 ##########################################################################
 
