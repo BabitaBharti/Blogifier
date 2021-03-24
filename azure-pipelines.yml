@@ -96,7 +96,7 @@ stages:
       steps:      
       - task: WhiteSource@21
         inputs:
-          cwd: '$(System.DefaultWorkingDirectory)'
+          #cwd: '$(System.DefaultWorkingDirectory)'
 
 ##########################################################################
 
