@@ -12,6 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   solution: '**/*.sln'
+  webapp_name: 'demo-dot-net-project'
 
 stages:
 
@@ -105,6 +106,7 @@ stages:
   dependsOn:
       - Unit_Test
       - WhiteSource_Bolt
+  
   jobs:
     - job: 
       steps: 
@@ -135,9 +137,37 @@ stages:
           projects: 'src/Blogifier/Blogifier.csproj'
           arguments: '--self-contained --runtime win-x86 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
           zipAfterPublish: True
-          
+      - task: CopyFiles@2
+        inputs:
+          SourceFolder: '$(System.DefaultWorkingDirectory)'
+          Contents: '**/*.yml'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  
       - task: PublishBuildArtifacts@1
         inputs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
           artifactName: 'Drop'
       
+      
+      - task: Ansible@0
+        inputs:
+          ansibleInterface: 'remoteMachine'
+          connectionOverSsh: 'Ansible-serverVM'
+          playbookSourceRemoteMachine: 'agentMachine'
+          playbookRootRemoteMachine: '(Pipeline.Workspace)/Drop/'
+          playbookPathLinkedArtifactOnRemoteMachine: 'webapp.yml'
+          inventoriesRemoteMachine: 'hostList'
+          inventoryHostListRemoteMachine: '13.71.45.109'
+          sudoEnabled: true
+          sudoUser: 'ubuntu'
+          sudoEnabled: true
+          sudoUser: ubuntu
+
+             
+     
+      - task: AzureRmWebAppDeployment@4
+        displayName: 'Azure App Service Deploy: $(webapp_name)'
+        inputs:
+          azureSubscription: 'Pay-As-You-Go (2bf3ae71-d116-484d-a88c-ba149c6430ff)'
+          WebAppName: '$(webapp_name)'
+          packageForLinux: '$(Pipeline.Workspace)/Drop/(Build.BuildId).zip'
