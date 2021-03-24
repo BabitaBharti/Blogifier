@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 variables:
   buildConfiguration: 'Release'
@@ -31,6 +31,84 @@ stages:
 
 - stage: Application_Build
   displayName: 'Application Build'
+  dependsOn:
+      - Initial_Job
+  jobs:
+    - job: 
+      steps: 
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          useGlobalJson: true
+      - task: NuGetToolInstaller@1
+        inputs:
+          versionSpec: '5.x.x'
+          checkLatest: true
+      - task: NuGetCommand@2
+        inputs:
+          command: 'restore'
+          restoreSolution: '$(solution)'
+          feedsToUse: 'select'
+          noCache: true
+    
+      - script: dotnet build --configuration $(buildConfiguration)
+        displayName: 'dotnet build $(buildConfiguration)'
+
+
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet publish $(buildConfiguration)'
+        inputs:
+          command: publish
+          publishWebProjects: False
+          projects: 'src/Blogifier/Blogifier.csproj'
+          arguments: '--self-contained --runtime win-x86 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+          zipAfterPublish: True
+          
+     
+########################################################################
+
+- stage: Unit_Test
+  displayName: 'Run Unit Testing'
+  dependsOn:
+      - Application_Build
+  jobs:
+    - job: 
+      pool: 
+        vmImage: 'windows-latest'
+      steps:      
+      - task: DotNetCoreCLI@2
+        displayName: 'Run Unit Test'
+        inputs:
+          command: 'test'
+          projects: '**/*.Tests/*.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+
+
+##########################################################################
+
+- stage: WhiteSource_Bolt
+  displayName: 'Run WhiteSource_Bolt'
+  dependsOn:
+      - Application_Build
+  jobs:
+    - job: 
+      pool: 
+        vmImage: 'windows-latest'
+      steps:      
+      - task: DotNetCoreCLI@2
+        displayName: 'Run Unit Test'
+        inputs:
+          command: 'test'
+          projects: '**/*.Tests/*.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+
+##########################################################################
+
+- stage: Deployment
+  displayName: 'Deployment'
+  dependsOn:
+      - Unit_Test
+      - WhiteSource_Bolt
   jobs:
     - job: 
       steps: 
@@ -66,19 +144,4 @@ stages:
         inputs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
           artifactName: 'Drop'
-########################################################################
-
-- stage: Run_Unit_Test
-  displayName: 'Run Unit Testing'
-  jobs:
-    - job: 
-      steps:      
-      - task: DotNetCoreCLI@2
-        displayName: 'Run Unit Test'
-        inputs:
-          command: 'test'
-          projects: '**/*.Tests/*.csproj'
-          arguments: '--configuration $(buildConfiguration)'
-
-
       
