@@ -164,8 +164,9 @@ stages:
           ansibleInterface: 'remoteMachine'
           connectionOverSsh: 'Ansible-serverVM'
           playbookSourceRemoteMachine: 'agentMachine'
-          playbookRootRemoteMachine: '$(System.DefaultWorkingDirectory)/_BabitaBharti.Blogifier/Drop'
+          playbookRootRemoteMachine: '$(System.DefaultWorkingDirectory)/_BabitaBharti.Blogifier/Drop/'
           playbookPathLinkedArtifactOnRemoteMachine: 'web-app.yml'
+          playbookPathOnAgentMachine: '$(System.DefaultWorkingDirectory)/_BabitaBharti.Blogifier/Drop/web-app.yml'
           inventoriesRemoteMachine: 'hostList'
           inventoryHostListRemoteMachine: '13.71.45.109'
           sudoEnabled: true
