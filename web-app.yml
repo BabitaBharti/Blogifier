@@ -4,7 +4,7 @@
   vars:
     resource_group: ansible
     webapp_name: demo-dot-net-project
-    location: eastus
+    location: centalindia
   tasks:
     - name: Create a resource group
       azure_rm_resourcegroup:
