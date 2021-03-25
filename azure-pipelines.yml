@@ -12,7 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   solution: '**/*.sln'
-  webapp_name: 'demo-dot-net-project'
+  webapp_name: 'tx-dot-net-project'
   environmentName: prod
 
 stages:
@@ -150,3 +150,14 @@ stages:
                   azureSubscription: 'Pay-As-You-Go (2bf3ae71-d116-484d-a88c-ba149c6430ff)'
                   WebAppName: '$(webapp_name)'
                   packageForLinux: '$(Pipeline.Workspace)/Drop/*.zip'
+
+#########################################################################
+
+- stage: Final_Stage
+  displayName: Final Checks Stage
+  dependsOn:
+    - Deployment
+  jobs:
+  - job: Final_Stage
+    steps:
+    - checkout: none
