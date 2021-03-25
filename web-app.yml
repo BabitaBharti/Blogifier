@@ -6,10 +6,6 @@
     webapp_name: demo-dot-net-project
     location: centalindia
   tasks:
-    - name: Create a resource group
-      azure_rm_resourcegroup:
-        name: "{{ resource_group }}"
-        location: "{{ location }}"
     - name: Create a dotnetcore WebApp
       azure_rm_webapp:
         resource_group: "{{ resource_group }}"
