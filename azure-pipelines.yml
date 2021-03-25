@@ -13,6 +13,7 @@ variables:
   buildConfiguration: 'Release'
   solution: '**/*.sln'
   webapp_name: 'demo-dot-net-project'
+  environmentName: prod
 
 stages:
 
@@ -116,68 +117,36 @@ stages:
   dependsOn:
       - Unit_Test
       - WhiteSource_Bolt
-  
+  condition: succeeded()
   jobs:
-    - job: 
-      steps: 
-   #   - task: UseDotNet@2
-   #     inputs:
-   #       packageType: 'sdk'
-    #      useGlobalJson: true
-  #    - task: NuGetToolInstaller@1
-    #    inputs:
-    #      versionSpec: '5.x.x'
-     #     checkLatest: true
-   #   - task: NuGetCommand@2
-   #     inputs:
-  #        command: 'restore'
-   #       restoreSolution: '$(solution)'
-   #       feedsToUse: 'select'
-     #     noCache: true
-    
-    #  - script: dotnet build --configuration $(buildConfiguration)
-    #    displayName: 'dotnet build $(buildConfiguration)'
-
-
-    #  - task: DotNetCoreCLI@2
-     #   displayName: 'dotnet publish $(buildConfiguration)'
-       # inputs:
-      #    command: publish
-      #    publishWebProjects: False
-      #    projects: 'src/Blogifier/Blogifier.csproj'
-       #   arguments: '--self-contained --runtime win-x86 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-       #   zipAfterPublish: True
-    #  - task: CopyFiles@2
-    #    inputs:
-     #     SourceFolder: '$(System.DefaultWorkingDirectory)'
-     #     Contents: '**/*.yml'
-       #   TargetFolder: '$(Build.ArtifactStagingDirectory)'
-  
-     # - task: PublishBuildArtifacts@1
-    #    inputs:
-      #    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-       #   artifactName: 'Drop'
-      
-      
-      - task: Ansible@0
-        inputs:
-          ansibleInterface: 'remoteMachine'
-          connectionOverSsh: 'Ansible-serverVM'
-          playbookSourceRemoteMachine: 'agentMachine'
-          playbookRootRemoteMachine: '$(System.DefaultWorkingDirectory)/_BabitaBharti.Blogifier/Drop/'
-          playbookPathLinkedArtifactOnRemoteMachine: 'web-app.yml'
-          playbookPathOnAgentMachine: '$(System.DefaultWorkingDirectory)/_BabitaBharti.Blogifier/Drop/web-app.yml'
-          inventoriesRemoteMachine: 'hostList'
-          inventoryHostListRemoteMachine: '13.71.45.109'
-          sudoEnabled: true
-          sudoUser: 'ubuntu'
-          
-
-             
      
-      - task: AzureRmWebAppDeployment@4
-        displayName: 'Azure App Service Deploy: $(webapp_name)'
-        inputs:
-          azureSubscription: 'Pay-As-You-Go (2bf3ae71-d116-484d-a88c-ba149c6430ff)'
-          WebAppName: '$(webapp_name)'
-          packageForLinux: '$(System.DefaultWorkingDirectory)/_BabitaBharti.Blogifier/Drop/(Build.BuildId).zip'
+      - deployment: Deploy
+        displayName: Deploy
+        environment: $(environmentName)
+        strategy:
+          runOnce:
+            deploy:
+              steps: 
+            
+              - task: Ansible@0
+                inputs:
+                  ansibleInterface: 'remoteMachine'
+                  connectionOverSsh: 'Ansible-serverVM'
+                  playbookSourceRemoteMachine: 'agentMachine'
+                  playbookRootRemoteMachine: '$(Pipeline.Workspace)/Drop/'
+                  playbookPathLinkedArtifactOnRemoteMachine: 'web-app.yml'
+                  playbookPathOnAgentMachine: '$(Pipeline.Workspace)/Drop/web-app.yml'
+                  inventoriesRemoteMachine: 'hostList'
+                  inventoryHostListRemoteMachine: '13.71.45.109'
+                  sudoEnabled: true
+                  sudoUser: 'ubuntu'
+                  
+
+                    
+            
+              - task: AzureRmWebAppDeployment@4
+                displayName: 'Azure App Service Deploy: $(webapp_name)'
+                inputs:
+                  azureSubscription: 'Pay-As-You-Go (2bf3ae71-d116-484d-a88c-ba149c6430ff)'
+                  WebAppName: '$(webapp_name)'
+                  packageForLinux: '$(Pipeline.Workspace)/Drop/*.zip'
