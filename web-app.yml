@@ -3,7 +3,7 @@
   connection: local
   vars:
     resource_group: ansible
-    webapp_name: demo-dot-net-project
+    webapp_name: tx-dot-net-project
     location: centalindia
   tasks:
     - name: Create a dotnetcore WebApp
@@ -18,4 +18,4 @@
           number_of_workers: 1
         frameworks:
           - name: "net_framework"
-            version: "3.5"
+            version: "5.0"
