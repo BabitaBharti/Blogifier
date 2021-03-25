@@ -115,7 +115,7 @@ stages:
   dependsOn:
       - Unit_Test
       - WhiteSource_Bolt
-      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   
   jobs:
      
