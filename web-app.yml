@@ -2,7 +2,7 @@
   hosts: localhost
   connection: local
   vars:
-    resource_group: "{{ lookup('env', 'RES_GROUP') }}"
+    resource_group: ansible
     webapp_name: demo-dot-net-project
     location: eastus
   tasks:
