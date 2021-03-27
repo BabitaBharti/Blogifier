@@ -149,18 +149,18 @@ stages:
             deploy:
               steps: 
             
-              - task: Ansible@0
-                inputs:
-                  ansibleInterface: 'remoteMachine'
-                  connectionOverSsh: 'Ansible-serverVM'
-                  playbookSourceRemoteMachine: 'agentMachine'
-                  playbookRootRemoteMachine: '$(Pipeline.Workspace)/Drop/'
-                  playbookPathLinkedArtifactOnRemoteMachine: 'web-app.yml'
-                  playbookPathOnAgentMachine: '$(Pipeline.Workspace)/Drop/web-app.yml'
-                  inventoriesRemoteMachine: 'hostList'
-                  inventoryHostListRemoteMachine: '13.71.45.109'
-                  sudoEnabled: true
-                  sudoUser: 'ubuntu'
+              #- task: Ansible@0
+              #  inputs:
+              #    ansibleInterface: 'remoteMachine'
+              #    connectionOverSsh: 'Ansible-serverVM'
+               #   playbookSourceRemoteMachine: 'agentMachine'
+               #   playbookRootRemoteMachine: '$(Pipeline.Workspace)/Drop/'
+               #   playbookPathLinkedArtifactOnRemoteMachine: 'web-app.yml'
+               #   playbookPathOnAgentMachine: '$(Pipeline.Workspace)/Drop/web-app.yml'
+                #  inventoriesRemoteMachine: 'hostList'
+               #   inventoryHostListRemoteMachine: '13.71.45.109'
+               #   sudoEnabled: true
+               #   sudoUser: 'ubuntu'
                   
 
                     
