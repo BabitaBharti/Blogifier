@@ -12,7 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   solution: '**/*.sln'
-  webapp_name: 'tx-dot-net-project'
+  webapp_name: 'tx-dot-net-project-demo'
   environmentName: prod
 
 stages:
