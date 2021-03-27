@@ -3,7 +3,7 @@
   connection: local
   vars:
     resource_group: ansible
-    webapp_name: tx-dot-net-project
+    webapp_name: tx-dot-net-project-demo
     location: centalindia
   tasks:
     - name: Create a dotnetcore WebApp
@@ -12,7 +12,7 @@
         name: "{{ webapp_name }}"
         plan:
           resource_group: "{{ resource_group }}"
-          name: myDotappplan
+          name: myDotnetappplan
           is_linux: false
           sku: S1
           number_of_workers: 1
